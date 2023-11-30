@@ -1,1 +1,109 @@
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
 
+public class AlgoritmoGenetico {
+    private static final int LONGITUD_GENES = 2;
+    private static final int TAMANO_POBLACION = 20;
+    private static final int NUM_GENERACIONES = 100;
+    private static final double ELITISMO = 0.3;
+    private static final double RANGO_MUTACION = 0.2;
+
+    private static Random random = new Random();
+
+    public static void main(String[] args) {
+        List<Individuo> poblacion = iniciarPoblacion();
+
+        Individuo mejorSolucion = null;
+        int generacionMejorSolucion = 0;
+
+        for (int i = 0; i < NUM_GENERACIONES; i++) {
+            List<Individuo> nuevaPoblacion = new ArrayList<>();
+
+            int eliteConteo = (int) (TAMANO_POBLACION * ELITISMO);
+            nuevaPoblacion.addAll(obtenerElite(poblacion, eliteConteo));
+
+            while (nuevaPoblacion.size() < TAMANO_POBLACION) {
+                Individuo padre1 = seleccionarPadres(poblacion);
+                Individuo padre2 = seleccionarPadres(poblacion);
+
+                Individuo descendencia = cruzar(padre1, padre2);
+                nuevaPoblacion.add(descendencia);
+            }
+
+            for (int j = eliteConteo; j < nuevaPoblacion.size(); j++) {
+                mutar(nuevaPoblacion.get(j));
+            }
+
+            poblacion = nuevaPoblacion;
+
+            // Actualizar la mejor solución si es necesario
+            Individuo mejorSolucionGeneracion = obtenerMejorSolucion(poblacion);
+            if (mejorSolucion == null || mejorSolucionGeneracion.getAptitud() > mejorSolucion.getAptitud()) {
+                mejorSolucion = mejorSolucionGeneracion;
+                generacionMejorSolucion = i + 1; // Se suma 1 porque las generaciones comienzan desde 1
+            }
+        }
+
+        double mejorMSE = mejorSolucion.calcularMSE(mejorSolucion.getGenes(), Dataset.x, Dataset.y);
+        System.out.println("Mejor solución en la generación " + generacionMejorSolucion + ":");
+        System.out.println("Genes de la mejor solución: " + java.util.Arrays.toString(mejorSolucion.getGenes()));
+        System.out.println("Aptitud de la mejor solución: " + mejorSolucion.getAptitud());
+        System.out.println("MSE de la mejor solución: " + mejorMSE);
+    }
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+
+public class AlgoritmoGenetico {
+    private static final int LONGITUD_GENES = 2;
+    private static final int TAMANO_POBLACION = 20;
+    private static final int NUM_GENERACIONES = 100;
+    private static final double ELITISMO = 0.3;
+    private static final double RANGO_MUTACION = 0.2;
+
+    private static Random random = new Random();
+
+    public static void main(String[] args) {
+        List<Individuo> poblacion = iniciarPoblacion();
+
+        Individuo mejorSolucion = null;
+        int generacionMejorSolucion = 0;
+
+        for (int i = 0; i < NUM_GENERACIONES; i++) {
+            List<Individuo> nuevaPoblacion = new ArrayList<>();
+
+            int eliteConteo = (int) (TAMANO_POBLACION * ELITISMO);
+            nuevaPoblacion.addAll(obtenerElite(poblacion, eliteConteo));
+
+            while (nuevaPoblacion.size() < TAMANO_POBLACION) {
+                Individuo padre1 = seleccionarPadres(poblacion);
+                Individuo padre2 = seleccionarPadres(poblacion);
+
+                Individuo descendencia = cruzar(padre1, padre2);
+                nuevaPoblacion.add(descendencia);
+            }
+
+            for (int j = eliteConteo; j < nuevaPoblacion.size(); j++) {
+                mutar(nuevaPoblacion.get(j));
+            }
+
+            poblacion = nuevaPoblacion;
+
+            // Actualizar la mejor solución si es necesario
+            Individuo mejorSolucionGeneracion = obtenerMejorSolucion(poblacion);
+            if (mejorSolucion == null || mejorSolucionGeneracion.getAptitud() > mejorSolucion.getAptitud()) {
+                mejorSolucion = mejorSolucionGeneracion;
+                generacionMejorSolucion = i + 1; // Se suma 1 porque las generaciones comienzan desde 1
+            }
+        }
+
+        double mejorMSE = mejorSolucion.calcularMSE(mejorSolucion.getGenes(), Dataset.x, Dataset.y);
+        System.out.println("Mejor solución en la generación " + generacionMejorSolucion + ":");
+        System.out.println("Genes de la mejor solución: " + java.util.Arrays.toString(mejorSolucion.getGenes()));
+        System.out.println("Aptitud de la mejor solución: " + mejorSolucion.getAptitud());
+        System.out.println("MSE de la mejor solución: " + mejorMSE);
+    }
